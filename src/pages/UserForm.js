@@ -32,6 +32,7 @@ const UserForm = ({match}) => {
 
     const [ formTitle, setFormtitle ] = useState('Add');
     const [ uid, setUid ] = useState(0);
+    const [ uAvatar, setAvatar] = useState('');
     const [ ufname, setUfname ] = useState('');
     const [ ulname, setUlname ] = useState('');
     const [ uaddress, setUaddress ] = useState('');
@@ -43,6 +44,11 @@ const UserForm = ({match}) => {
     const [ ustatus, setUstatus ] = useState(0);
     const [ passwordAttr, setPasswordattr ] = useState('required');
     
+    const pushAvatar = (e) =>{
+        setAvatar(e.target.files[0]);
+        console.log(e.target.files[0]);
+    }
+
     const pushFname = (e) =>{
         setUfname(e.target.value);
     }
@@ -79,11 +85,13 @@ const UserForm = ({match}) => {
         setUstatus(e.target.value);
     }
 
-    const onSubmit = e => {
+    const onSubmit = async e => {
         e.preventDefault();
 
         const utcTime = currentUTCTime();
-        let data_meta = {
+        const formData = new FormData();
+
+       /*  data_meta = {
             id : uid,
             username : uusername,
             first_name : ufname,
@@ -93,23 +101,35 @@ const UserForm = ({match}) => {
             contact_number : ucontact,
             type : utype,
             status : ustatus
-          };
+          }; */
 
-        if ( uid==0 ){
+        formData.append('id', uid);
+        formData.append('username', uusername);
+        formData.append('first_name', ufname);
+        formData.append('last_name', ulname);
+        formData.append('email', uemail);
+        formData.append('address', uaddress);
+        formData.append('contact_number', ucontact);
+        formData.append('type', utype);
+        formData.append('status', ustatus);
+        formData.append('avatar', uAvatar);
+
+
+       if ( uid==0 ){
             const date_created = { date_created : moment.utc(utcTime).format('YYYY-MM-DD HH:mm:ss') };
-            data_meta = {...data_meta, ...date_created };
+            formData = {...formData, ...date_created };
         }
 
         if ( !isEmpty(upassword) ){
             const password_meta = { password : upassword };
-            data_meta = {...data_meta, ...password_meta };
+            formData = {...formData, ...password_meta };
         }
        
         let action_name = ( parseInt(uid)==0 ) ? 'add' : 'update'; 
         let label_name = ( parseInt(uid)==0 ) ? 'added' : 'updated'; 
 
         axios
-        .post('/users/'+action_name, data_meta)
+        .post('/users/'+action_name, formData, { headers: { 'Content-Type': 'multipart/form-data' } } )
         .then( response => {
             const return_res = response.data;
         
@@ -124,7 +144,7 @@ const UserForm = ({match}) => {
         .catch(err => {
             console.error(err);
             messagePopup('could not process request!');
-        });
+        }); 
     }
 
     const fecthDetail = async () => {
@@ -194,6 +214,12 @@ const UserForm = ({match}) => {
                         </div>
                         <form role="form" id="quickForm" onSubmit={onSubmit}>
                             <div className="card-body">
+
+                                <div className="form-group">
+                                    <label>Avatar</label>
+                                    <input type="file"  className="form-control" onChange={pushAvatar} ></input>
+                                </div>
+                                
                                  <div className="row">
                                       <div className="col-md-6">
                                             <div className="form-group">
