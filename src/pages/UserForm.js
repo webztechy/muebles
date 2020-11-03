@@ -6,6 +6,7 @@ import axios from 'axios';
 import { updatePageTitle } from '../actions';
 import { isEmpty } from './../helpers/Validation';
 import { userTypeLabels, currentUTCTime } from './../helpers/Utilities';
+import config from './../helpers/Config';
 
 //import Moment from 'react-moment';
 import moment from 'moment';
@@ -217,6 +218,7 @@ const UserForm = ({match}) => {
 
                                 <div className="form-group">
                                     <label>Avatar</label>
+                                    { config.avatar_path }
                                     <input type="file"  className="form-control" onChange={pushAvatar} ></input>
                                 </div>
                                 
