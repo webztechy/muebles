@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import jQuery from 'jquery';
 import axios from 'axios';
 
 import { updatePageTitle } from '../actions';
@@ -47,7 +48,14 @@ const UserForm = ({match}) => {
     
     const pushAvatar = (e) =>{
         setAvatar(e.target.files[0]);
-        console.log(e.target.files[0]);
+        //console.log(e.target.files[0]);
+        
+        var reader = new FileReader();
+		reader.onload = function (e) {
+            //console.log(e.target.result);
+            jQuery('.form-group-profile-wrap .profile-avatar').css('backgroundImage', "url(" + e.target.result + ")" );
+        }
+        reader.readAsDataURL(e.target.files[0]);
     }
 
     const pushFname = (e) =>{
@@ -117,13 +125,15 @@ const UserForm = ({match}) => {
 
 
        if ( uid==0 ){
-            const date_created = { date_created : moment.utc(utcTime).format('YYYY-MM-DD HH:mm:ss') };
-            formData = {...formData, ...date_created };
+            //const date_created_meta = { date_created : moment.utc(utcTime).format('YYYY-MM-DD HH:mm:ss') };
+            //formData = {...formData, ...date_created_meta };
+            formData.append('date_created', moment.utc(utcTime).format('YYYY-MM-DD HH:mm:ss') );
         }
 
         if ( !isEmpty(upassword) ){
-            const password_meta = { password : upassword };
-            formData = {...formData, ...password_meta };
+            //const password_meta = { password : upassword };
+            //formData = {...formData, ...password_meta };
+            formData.append('password', upassword);
         }
        
         let action_name = ( parseInt(uid)==0 ) ? 'add' : 'update'; 
@@ -159,6 +169,7 @@ const UserForm = ({match}) => {
                 user_detail = user_detail[user_id];
 
                 setUid(user_id);
+                setAvatar(user_detail.avatar);
                 setUfname(user_detail.first_name);
                 setUlname(user_detail.last_name);
                 setUaddress(user_detail.address);
@@ -183,6 +194,7 @@ const UserForm = ({match}) => {
             setFormtitle('Add');
 
             setUid(0);
+            setAvatar('');
             setUfname('');
             setUlname('');
             setUaddress('');
@@ -194,6 +206,12 @@ const UserForm = ({match}) => {
             setPasswordattr('required');
         }
     }, [match] ); //it will excecute multiple 
+
+
+    const chooseAvatar = () => {
+        //document.getElementById('input-avatar-file').click();
+        jQuery('.form-group-profile-wrap .input-avatar-file').trigger('click');
+    }
 
     useEffect( () => {
         const user_id = match.params.id;
@@ -213,13 +231,13 @@ const UserForm = ({match}) => {
                         <div className="card-header">
                             <h3 className="card-title">{formTitle} <small>detail</small></h3>
                         </div>
-                        <form role="form" id="quickForm" onSubmit={onSubmit}>
+                        <form role="form" id="quickForm" onSubmit={onSubmit} className="form-profile-wrap">
                             <div className="card-body">
 
-                                <div className="form-group">
+                                <div className="form-group form-group-profile-wrap">
                                     <label>Avatar</label>
-                                    { config.avatar_path }
-                                    <input type="file"  className="form-control" onChange={pushAvatar} ></input>
+                                    <input type="file" className="form-control input-avatar-file" onChange={pushAvatar} ></input>
+                                    <div className="profile-avatar" onClick={ () => chooseAvatar() } style={{ backgroundImage: `url(${config.avatar_path+'/'+uAvatar})` }}></div>
                                 </div>
                                 
                                  <div className="row">

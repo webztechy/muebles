@@ -1,0 +1,12 @@
+.form-profile-wrap .form-group-profile-wrap input {
+  display: none;
+}
+
+.form-profile-wrap .profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+}
+/*# sourceMappingURL=style.css.map */
