@@ -1,7 +1,80 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+//import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+
+import { isLoggedin } from '../actions';
+import { isEmpty } from './../helpers/Validation';
+import config from './../helpers/Config';
+
+import { confirmAlert } from 'react-confirm-alert'; // Import
 
 const Login = ( props ) => {
+
+    const dispatch = useDispatch();
+    const [ username, setUsername ] = useState('');
+    const [ password, setPassword ] = useState('');
+
+    const pushUsername = (e) =>{
+        setUsername(e.target.value);
+    }
+
+    const pushPassword = (e) =>{
+        setPassword(e.target.value);
+    }
+
+    const messagePopup = (msg) => {
+        confirmAlert({
+          title: 'Alert',
+          message: msg.toString(),
+          buttons: [
+            {
+              label: 'Ok'
+            }
+          ]
+        });
+    }
+
+    const getAccess = e => {
+        e.preventDefault();
+
+        if ( !isEmpty(username) &&  !isEmpty(password) ){
+            let data_meta = {
+                username : username,
+                password : password,
+              };
+
+            axios
+            .post(config.api_url+'users/login', data_meta)
+            .then( response => {
+
+                const return_res = response;
+                
+                if ( return_res.status==200 && return_res.data.length>0  ){
+                    const user_detail = return_res.data[0];
+
+                    sessionStorage.setItem(
+                        "login_session",
+                        JSON.stringify(user_detail)
+                    );
+
+                    dispatch( isLoggedin(1) );
+
+                }else{
+                    dispatch( isLoggedin(0) );
+                    messagePopup('username and password did not matched!');
+                } 
+    
+            })
+            .catch(err => {
+                //console.error(err);
+                dispatch( isLoggedin(0) );
+                messagePopup('could not process request!');
+            });
+        }
+    }
+
+
     return (
         <div className="login-page">
             <div className="login-box">
@@ -12,9 +85,9 @@ const Login = ( props ) => {
                     <div className="card-body login-card-body">
                         <p className="login-box-msg">Sign in to start your session</p>
 
-                        <form method="post">
+                        <form method="post" onSubmit={getAccess}> 
                             <div className="input-group mb-3">
-                                <input type="text" className="form-control" placeholder="username"></input>
+                                <input type="text" className="form-control" value={username} onChange={ pushUsername } placeholder="username"></input>
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                     <span className="fas fa-envelope"></span>
@@ -22,7 +95,7 @@ const Login = ( props ) => {
                                 </div>
                             </div>
                             <div className="input-group mb-3">
-                                <input type="password" className="form-control" placeholder="password"></input>
+                                <input type="password" className="form-control" value={password} onChange={ pushPassword } placeholder="password"></input>
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                     <span className="fas fa-lock"></span>
@@ -36,7 +109,7 @@ const Login = ( props ) => {
                                     </div>
                                 </div>
                                 <div className="col-4">
-                                    <button type="button" className="btn btn-primary btn-block" onClick={ () => props.getUserLoggin() }>Sign In</button>
+                                    <button type="submit" className="btn btn-primary btn-block" >Sign In</button>
                                 </div>
                             </div>
                         </form>

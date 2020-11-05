@@ -7,7 +7,7 @@ import Header from './layout/Header';
 import Sidebar from './layout/Sidebar';
 import Footer from './layout/Footer';
 
-//import Login from './pages/Login';
+import Login from './pages/Login';
 import Home from './pages/Home';
 import Products from './pages/Products';
 import ProductForm from './pages/ProductForm';
@@ -19,52 +19,73 @@ import UserForm from './pages/UserForm';
 
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
-function App() {
+import { isLoggedin } from './actions';
 
+const App = () => {
+
+  const dispatch = useDispatch();
   const pageTitle = useSelector( state => state.pages);
- /*  const [ isLogin, setIsLogin ] = useState(0);
-  
+  const loginStatus = useSelector( state => state.isloggedin);
+
   const getUserLoggin = () => {
-      console.log('login');
-      setIsLogin(1);
-  } */
+
+    const sessionUserLogin = JSON.parse(
+      sessionStorage.getItem('login_session')
+    );
+
+    if ( sessionUserLogin !== null ){
+        dispatch( isLoggedin(1) );
+    }
+  }  
+
+
+  useEffect( () => {
+    getUserLoggin();
+
+  },[]);
 
   return (
     <Router>
-        <div className="wrapper">
-            <Header />
-            <Sidebar />
+        { ( loginStatus==0 ) ?
+          ( <Login /> )
+        :
+          (
+            <div className="wrapper">
+              <Header />
+              <Sidebar />
 
-            <div className="content-wrapper">
-            <section className="content-header">
-                <div className="container-fluid">
-                <div className="row mb-2">
-                    <div className="col-sm-6">
-                    <h1>{ pageTitle }</h1>
-                    </div>
-                </div>
-                </div>
-            </section>
+              <div className="content-wrapper">
+              <section className="content-header">
+                  <div className="container-fluid">
+                  <div className="row mb-2">
+                      <div className="col-sm-6">
+                      <h1>{ pageTitle }</h1>
+                      </div>
+                  </div>
+                  </div>
+              </section>
 
-            <section className="content">
-                <Switch>
-                  <Route path="/" exact component={Home} />
-                  <Route path="/products" exact component={Products} />
-                  <Route path="/product-form" exact component={ProductForm} />
-                  <Route path="/product-form/:id" exact component={ProductForm} />
-                  <Route path="/categories" exact component={Categories} />
-                  <Route path="/category-form" exact component={CategoryForm} />
-                  <Route path="/category-form/:id" exact component={CategoryForm} />
-                  <Route path="/orders" exact component={Orders} />
-                  <Route path="/users" exact component={Users} />
-                  <Route path="/user-form" exact component={UserForm} />
-                  <Route path="/user-form/:id" exact component={UserForm} />
-                </Switch>
-            </section>
-            </div>
+              <section className="content">
+                  <Switch>
+                    <Route path="/" exact component={Home} />
+                    <Route path="/products" exact component={Products} />
+                    <Route path="/product-form" exact component={ProductForm} />
+                    <Route path="/product-form/:id" exact component={ProductForm} />
+                    <Route path="/categories" exact component={Categories} />
+                    <Route path="/category-form" exact component={CategoryForm} />
+                    <Route path="/category-form/:id" exact component={CategoryForm} />
+                    <Route path="/orders" exact component={Orders} />
+                    <Route path="/users" exact component={Users} />
+                    <Route path="/user-form" exact component={UserForm} />
+                    <Route path="/user-form/:id" exact component={UserForm} />
+                  </Switch>
+              </section>
+              </div>
 
-            <Footer />
-        </div>
+              <Footer />
+          </div>
+          )
+        }
         
     </Router>
   );

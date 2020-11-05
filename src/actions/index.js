@@ -4,3 +4,10 @@ export const updatePageTitle = (nr) =>{
       payload : nr
     }
   }
+
+export const isLoggedin = (status) =>{
+    return{
+        type : 'ISLOGGEDIN',
+        payload : status
+    }
+}

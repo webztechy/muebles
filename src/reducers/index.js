@@ -1,8 +1,9 @@
-import pagesReducer  from './pages';
+import { pagesReducer, isloggedinReducer }  from './pages';
 import { combineReducers } from 'redux';
 
 const allReducers = combineReducers({
-    pages : pagesReducer
+    pages : pagesReducer,
+    isloggedin : isloggedinReducer
 });
 
 export default allReducers;

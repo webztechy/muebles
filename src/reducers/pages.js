@@ -1,4 +1,4 @@
-const pagesReducer = ( state = '', action ) =>{
+export const pagesReducer = ( state = '', action ) =>{
     switch (action.type) {
         case 'UPDATETITLE':
                 state = action.payload;
@@ -11,4 +11,16 @@ const pagesReducer = ( state = '', action ) =>{
     }
 }
 
-export default pagesReducer;
+
+export const isloggedinReducer = ( state = 0, action ) =>{
+    switch (action.type) {
+        case 'ISLOGGEDIN':
+                state = action.payload;
+                return state;
+            break;
+    
+        default:
+            return state;
+            break;
+    }
+}

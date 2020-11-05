@@ -100,18 +100,6 @@ const UserForm = ({match}) => {
         const utcTime = currentUTCTime();
         const formData = new FormData();
 
-       /*  data_meta = {
-            id : uid,
-            username : uusername,
-            first_name : ufname,
-            last_name : ulname,
-            email : uemail,
-            address : uaddress,
-            contact_number : ucontact,
-            type : utype,
-            status : ustatus
-          }; */
-
         formData.append('id', uid);
         formData.append('username', uusername);
         formData.append('first_name', ufname);
@@ -123,23 +111,44 @@ const UserForm = ({match}) => {
         formData.append('status', ustatus);
         formData.append('avatar', uAvatar);
 
-
        if ( uid==0 ){
-            //const date_created_meta = { date_created : moment.utc(utcTime).format('YYYY-MM-DD HH:mm:ss') };
-            //formData = {...formData, ...date_created_meta };
             formData.append('date_created', moment.utc(utcTime).format('YYYY-MM-DD HH:mm:ss') );
         }
 
         if ( !isEmpty(upassword) ){
-            //const password_meta = { password : upassword };
-            //formData = {...formData, ...password_meta };
             formData.append('password', upassword);
         }
        
         let action_name = ( parseInt(uid)==0 ) ? 'add' : 'update'; 
         let label_name = ( parseInt(uid)==0 ) ? 'added' : 'updated'; 
 
-        axios
+        try {
+
+            const response = await axios.post('/users/'+action_name, formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              },
+              onUploadProgress: progressEvent => {
+                
+              }
+            });
+      
+            const return_res = response.data;
+
+            if ( return_res.status==1 ){
+                messagePopup(label_name+' successfully!');
+            }else{
+                messagePopup('could not '+label_name+' data!');
+            } 
+
+
+        } catch (err) {
+            console.error(err);
+            messagePopup('could not process request!');
+        }
+
+        // this is also working...
+        /* axios
         .post('/users/'+action_name, formData, { headers: { 'Content-Type': 'multipart/form-data' } } )
         .then( response => {
             const return_res = response.data;
@@ -155,7 +164,8 @@ const UserForm = ({match}) => {
         .catch(err => {
             console.error(err);
             messagePopup('could not process request!');
-        }); 
+        });  */
+
     }
 
     const fecthDetail = async () => {

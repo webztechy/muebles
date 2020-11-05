@@ -1,8 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import jQuery from 'jquery';
 import config from './../helpers/Config';
 
+import { useSelector, useDispatch } from 'react-redux';
+
+import { isLoggedin } from '../actions';
+
 const Sidebar = () => {
+
+    const dispatch = useDispatch();
+    
+   /*  const toggleMenu = (e, id) => {
+        jQuery(e.target).closest('.has-treeview').toggleClass('menu-open');
+    } */
+
+    const endAccess = () =>{
+        dispatch( isLoggedin(0) );
+        sessionStorage.removeItem('login_session');
+    }
+
     return (
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
 
@@ -35,7 +52,7 @@ const Sidebar = () => {
                         </li>
 
                         <li className="nav-item has-treeview">
-                            <Link to="#"  className="nav-link">
+                            <Link to="#" className="nav-link">
                                 <i className="nav-icon fas fa-barcode"></i>
                                 <p>
                                     Products
@@ -94,7 +111,11 @@ const Sidebar = () => {
                         </li>
 
                         <li className="nav-item has-treeview">
-                            <Link to="#"  className="nav-link">
+
+                            {/* <button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
+                            <button onClick={this.deleteRow.bind(this, id)}>Delete Row</button> */}
+
+                            <Link to="#" className="nav-link">
                                 <i className="nav-icon fas fa-users"></i>
                                 <p>
                                     Users
@@ -117,7 +138,13 @@ const Sidebar = () => {
 
                             </ul>
                         </li>
-                    
+                            
+                        <li className="nav-item">
+                            <div className="nav-link" onClick={ () => endAccess() }>
+                                <i className="nav-icon fas fa-lock"></i>
+                                <p>Logout</p>
+                            </div>
+                        </li>
                     </ul>
                 </nav>
             </div>

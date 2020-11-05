@@ -4,6 +4,7 @@ import { updatePageTitle } from '../actions';
 import { Link } from 'react-router-dom';
 
 import { fieldSorter, toNormalArrayObject } from './../helpers/Utilities';
+import config from './../helpers/Config';
 
 //import Moment from 'react-moment';
 import moment from 'moment';
@@ -24,7 +25,7 @@ const Categories = () => {
     }
 
     const fecthList = async () => {
-        const data = await fetch( '/categories/list' );
+        const data = await fetch( config.api_url+'categories/list' );
         let lists = await data.json();
 
         for (const [key, value] of Object.entries(lists)) {
@@ -48,7 +49,7 @@ const Categories = () => {
         
         if ( parseInt(id)>0 ){
             const data = await fetch(
-                '/categories/deleteById/'+id
+                config.api_url+'categories/deleteById/'+id
             );
             if ( data.status==200){
                 setIsLoaded(0);
