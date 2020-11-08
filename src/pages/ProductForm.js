@@ -7,6 +7,7 @@ import { fieldSorter, toNormalArrayObject } from './../helpers/Utilities';
 
 import { updatePageTitle } from './../actions';
 import { currentUTCTime } from './../helpers/Utilities';
+import config from './../helpers/Config';
 
 //import Moment from 'react-moment';
 import moment from 'moment';
@@ -90,7 +91,7 @@ const ProductForm = ({match}) => {
         let label_name = ( parseInt(pid)==0 ) ? 'added' : 'updated'; 
 
         axios
-        .post('/products/'+action_name, data_meta)
+        .post(config.api_url+'products/'+action_name, data_meta)
         .then( response => {
             const return_res = response.data;
         
@@ -109,7 +110,7 @@ const ProductForm = ({match}) => {
     }
 
     const fecthCategories = async () => {
-        const data = await fetch( '/categories/list/1' );
+        const data = await fetch( config.api_url+'categories/list/1' );
         let lists = await data.json();
 
         lists = toNormalArrayObject(lists);
@@ -124,7 +125,7 @@ const ProductForm = ({match}) => {
 
         if ( parseInt(pgroup_id)>0 ){
             const data = await fetch(
-                `/products/getById/${pgroup_id}`
+                `${config.api_url}products/getById/${pgroup_id}`
             );
 
             if (data.status==200){

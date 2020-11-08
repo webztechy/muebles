@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import { updatePageTitle } from '../actions';
 import { currentUTCTime } from './../helpers/Utilities';
+import config from './../helpers/Config';
 
 //import Moment from 'react-moment';
 import moment from 'moment';
@@ -67,7 +68,7 @@ const CategoryForm = ({match}) => {
         let label_name = ( parseInt(cid)==0 ) ? 'added' : 'updated'; 
 
         axios
-        .post('/categories/'+action_name, data_meta)
+        .post(config.api_url+'categories/'+action_name, data_meta)
         .then( response => {
             const return_res = response.data;
         
@@ -91,7 +92,7 @@ const CategoryForm = ({match}) => {
 
         if ( parseInt(pgroup_id)>0 ){
             const data = await fetch(
-                `/categories/getById/${pgroup_id}`
+                `${config.api_url}categories/getById/${pgroup_id}`
             );
 
             if (data.status==200){

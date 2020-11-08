@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 import moment from 'moment';
 import { fieldSorter, toNormalArrayObject } from './../helpers/Utilities';
+import config from './../helpers/Config';
 
 import { confirmAlert } from 'react-confirm-alert'; // Import
 //import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css; added in App.js
@@ -28,7 +29,7 @@ const Products = () => {
 
     
     const fecthList = async () => {
-        const data = await fetch( '/products/list' );
+        const data = await fetch( config.api_url+'products/list' );
         let lists = await data.json();
 
         for (const [key, value] of Object.entries(lists)) {
@@ -53,7 +54,7 @@ const Products = () => {
         
         if ( parseInt(id)>0 ){
             const data = await fetch(
-                '/products/deleteById/'+id
+                config.api_url+'products/deleteById/'+id
             );
             if ( data.status==200){
                 setIsLoaded(0);

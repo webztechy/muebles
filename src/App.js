@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
+//import config  from './helpers/Config';
+//import { appendScript }  from './helpers/Utilities';
+
 import Header from './layout/Header';
 import Sidebar from './layout/Sidebar';
 import Footer from './layout/Footer';
@@ -35,10 +38,18 @@ const App = () => {
 
     if ( sessionUserLogin !== null ){
         dispatch( isLoggedin(1) );
+        //appendScript(`${config.assets_url}theme/js/adminlte.min.js`);
     }
   }  
 
 
+  useEffect( () => {
+    /* if ( loginStatus==1 ){
+      appendScript(`${config.assets_url}theme/js/adminlte.min.js`);
+      console.log('cccc');
+    } */
+  });
+  
   useEffect( () => {
     getUserLoggin();
 
@@ -50,6 +61,7 @@ const App = () => {
           ( <Login /> )
         :
           (
+            
             <div className="wrapper">
               <Header />
               <Sidebar />
@@ -84,6 +96,7 @@ const App = () => {
 
               <Footer />
           </div>
+         
           )
         }
         

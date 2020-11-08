@@ -124,7 +124,7 @@ const UserForm = ({match}) => {
 
         try {
 
-            const response = await axios.post('/users/'+action_name, formData, {
+            const response = await axios.post(config.api_url+'users/'+action_name, formData, {
               headers: {
                 'Content-Type': 'multipart/form-data'
               },
@@ -173,7 +173,7 @@ const UserForm = ({match}) => {
 
         if ( parseInt(user_id)>0 ){
             axios
-            .post('/users/list', { id : user_id })
+            .post(config.api_url+'users/list', { id : user_id })
             .then( response => {
                 let user_detail = response.data;
                 user_detail = user_detail[user_id];

@@ -6,6 +6,7 @@ import axios from 'axios';
 
 import moment from 'moment';
 import { userTypeLabels, fieldSorter, toNormalArrayObject  } from './../helpers/Utilities';
+import config from './../helpers/Config';
 
 import { confirmAlert } from 'react-confirm-alert'; // Import
 //import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css; added in App.js
@@ -25,7 +26,7 @@ const Users = () => {
     const fecthList = async () => {
 
         axios
-        .post('/users/list')
+        .post(config.api_url+'users/list')
         .then( response => {
             let lists = response.data;
 
@@ -54,7 +55,7 @@ const Users = () => {
         
         if ( parseInt(id)>0 ){
            const data = await fetch(
-                '/users/deleteById/'+id
+                config.api_url+'users/deleteById/'+id
             );
             if ( data.status==200){
                 setIsLoaded(0);

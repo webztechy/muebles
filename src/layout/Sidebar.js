@@ -102,13 +102,21 @@ const Sidebar = () => {
                             </ul>
                         </li>
 
-
+        
                         <li className="nav-item">
                             <Link to="/orders" className="nav-link">
                                 <i className="nav-icon fas fa-shopping-basket"></i>
                                 <p>Orders</p>
                             </Link>
                         </li>
+
+                        <li className="nav-item">
+                            <Link to="#" className="nav-link">
+                                <i className="nav-icon fas fa-newspaper"></i>
+                                <p>News Letter</p>
+                            </Link>
+                        </li>
+
 
                         <li className="nav-item has-treeview">
 
