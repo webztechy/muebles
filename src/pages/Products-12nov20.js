@@ -44,8 +44,7 @@ const Products = () => {
                 const date_formatted = { date_formatted : local_time };
                 lists[key] = { ...value, ...date_formatted };
             }
-
-
+    
             lists = toNormalArrayObject(lists);
             lists = lists.sort(fieldSorter(['name']));
 
@@ -55,6 +54,25 @@ const Products = () => {
         .catch(err => {
             setIsLoaded(0);
         });
+
+        /* const data = await fetch( config.api_url+'products/list' );
+        let lists = await data.json();
+
+        for (const [key, value] of Object.entries(lists)) {
+            //console.log(`${key}: ${value}`);
+
+            const localTime  = moment.utc(value.date_created);  
+            const local_time = moment(new Date(localTime)).format('DDMMMYY hh:mm:ss').toLocaleString();   
+
+            const date_formatted = { date_formatted : local_time };
+            lists[key] = { ...value, ...date_formatted };
+        }
+
+        lists = toNormalArrayObject(lists);
+        lists = lists.sort(fieldSorter(['name']));
+
+        setIsLoaded(1);
+        setLists(lists); */
     }
 
 

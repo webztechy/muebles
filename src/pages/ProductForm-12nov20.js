@@ -124,13 +124,14 @@ const ProductForm = ({match}) => {
         const pgroup_id = match.params.id;
 
         if ( parseInt(pgroup_id)>0 ){
+            const data = await fetch(
+                `${config.api_url}products/getById/${pgroup_id}`
+            );
 
-            axios
-            .post(config.api_url+'products/list', { id : pgroup_id })
-            .then( response => {
-                let product_detail = response.data;
+            if (data.status==200){
+                let product_detail = await data.json();
                 product_detail = product_detail[pgroup_id];
-
+                
                 setPid(pgroup_id);
                 setPname(product_detail.name);
                 setPdesc(product_detail.description);
@@ -139,11 +140,7 @@ const ProductForm = ({match}) => {
                 setPfeatured(product_detail.featured_status); 
                 setPstatus(product_detail.status); 
                 
-            })
-            .catch(err => {
-                messagePopup('Could not get record detail!');
-            });
-            
+            }  
         }
     };
 
