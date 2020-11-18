@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 14, 2020 at 02:21 PM
+-- Generation Time: Nov 18, 2020 at 11:22 AM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.11
 
@@ -99,9 +99,18 @@ CREATE TABLE IF NOT EXISTS `tbl_orders` (
   `product_id` int(11) NOT NULL,
   `quantity` mediumint(5) NOT NULL,
   `price` float NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `date_created` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+
+--
+-- Dumping data for table `tbl_orders`
+--
+
+INSERT INTO `tbl_orders` (`id`, `product_id`, `quantity`, `price`, `status`, `date_created`) VALUES
+(14, 1, 1, 250, 1, NULL),
+(16, 12, 1, 125, 1, NULL);
 
 -- --------------------------------------------------------
 
